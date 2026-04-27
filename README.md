@@ -5,3 +5,53 @@ Breast lesion segmentation and classification in ultrasound (US) images are two 
 ## MTL Networks
 
 ![Diagram](./images/mtl_networks.png)
+
+## Main Dependencies
+
+- torch 1.10.1 
+- monai 0.8.1
+- numpy 1.21.6
+- nibabel 3.2.1
+
+## Data
+
+The code assumes that the dataset is organized with the following directory structure:
+
+```
+datasets/
+├── imagesTr/
+│   ├── X_Type.nii.gz
+│   └── ...
+├── labelsTr/
+│   ├── X_Type.nii.gz
+│   └── ...
+├── imagesVal/
+│   ├── X_Type.nii.gz
+│   └── ...
+├── labelsVal/
+│   ├── X_Type.nii.gz
+│   └── ...
+├── imagesTs/
+│   ├── X_Type.nii.gz
+│   └── ...
+└── labelsTs/
+    ├── X_Type.nii.gz
+    └── ...
+```
+The folders imagesTr, imagesVal, and imagesTs correspond to the training, validation, and testing sets, respectively. The files follow the naming convention X_Type.nii.gz, where:
+- X is the image identifier (e.g., a numeric index),
+- Type indicates the lesion classification (benign or malignant).
+For example: 1_benign.nii.gz.
+
+The corresponding labelsTr, labelsVal, and labelsTs folders contain the ground truth segmentation masks for each image, with matching filenames.
+
+## Training and Inference
+### Training example
+`python train_MTL.py --type "model_MTL_Seg_CB"`
+
+Note: The trained model weights (.pth files) are saved in the directory:
+
+`./results/<date>_model_MTL_Seg_CB`
+
+### Testing example
+`python test_MTL.py --model "best_mean_metrics_model.pth" --folder "./results/<date>_model_MTL_Seg_CB" --type "model_MTL_Seg_CB"`
