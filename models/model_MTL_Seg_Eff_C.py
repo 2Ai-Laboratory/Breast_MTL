@@ -9,6 +9,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# This file has been modified from the original MONAI implementation
+# to create a custom training pipeline for segmentation + classification
+# using different combinations/adaptations of EfficientNet + SegResNetVAE
+
 from typing import List, Optional, Sequence, Tuple, Union
 
 import numpy as np
@@ -51,6 +55,10 @@ class double_conv(nn.Module):
 class MTLNet(nn.Module):
     def __init__(self):
         super(MTLNet, self).__init__()
+
+        # Note: SegResNetVAE is used as backbone, although the VAE branch is not optimazed in this work.
+        # The architecture is kept for compatibility with pretrained weights and future extensions,
+        # where the VAE regularization could be enabled if needed.
         
         self.segmentation = SegResNetVAE(input_image_size=[512,384],init_filters=16,spatial_dims=2,in_channels=17,out_channels=1,)
         self.classification = EfficientNetBN("efficientnet-b0", spatial_dims=2, in_channels=17, num_classes=2)
